@@ -1,4 +1,10 @@
 #!/bin/bash
+# bash is needed for "source" with arguments
+
+# TODO:
+# - prepare temporary file instead of given
+#  - more accurate (without prefix)
+#  - can use without absolute path
 
 # git pick-feature "$filelist" "$base" "$branch"
 

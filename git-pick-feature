@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# git pick-feature "$filelist" "$base" "$branch"
+
+set -e
+
+pf_filelist="$1"
+pf_base="$2"
+pf_branch="$3"
+
+pf_git_dir=`git --exec-path`
+PATH="$PATH:$pf_git_dir"
+
+pf_base_hash=`git rev-parse "$pf_base"`
+
+pf_index_filter()
+{
+    bf_tree=`git write-tree`
+    git read-tree --empty
+    git ls-tree -r "$bf_tree" | grep -f "$pf_filelist" -F | git update-index --index-info
+}
+
+eval "
+pf_parent_filter()
+{
+    read pf_parent_info
+    case \"\$pf_parent_info\" in
+    *-p\\ $pf_base_hash*)
+        echo \"\"
+        echo \"in: \$pf_parent_info, out:\" >/dev/stderr
+        ;;
+    *)
+        echo \"\${pf_parent_info%% -p*}\"
+        echo \"in: \$pf_parent_info, out:\${pf_parent_info%% -p*}\" >/dev/stderr
+        ;;
+    esac
+}"
+
+. "$pf_git_dir"/git-filter-branch --index-filter pf_index_filter --parent-filter pf_parent_filter --prune-empty "$pf_base..$pf_branch" --first-parent

@@ -11,7 +11,7 @@ pf_branch="$3"
 pf_git_dir=`git --exec-path`
 PATH="$PATH:$pf_git_dir"
 
-pf_base_hash=`git rev-parse "$pf_base"`
+pf_base_hash=`git rev-parse "$pf_base^0"`
 
 pf_index_filter()
 {

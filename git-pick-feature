@@ -33,11 +33,9 @@ pf_parent_filter()
     case \"\$pf_parent_info\" in
     *-p\\ $pf_base_hash*)
         echo \"\"
-        echo \"in: \$pf_parent_info, out:\" >/dev/stderr
         ;;
     *)
         echo \"\${pf_parent_info%% -p*}\"
-        echo \"in: \$pf_parent_info, out:\${pf_parent_info%% -p*}\" >/dev/stderr
         ;;
     esac
 }"
